@@ -1,15 +1,16 @@
 package main
 
 import (
+	"log"
+
+	"github.com/AlexKomzzz/collectivity-tlg-bot/pkg/config"
+	"github.com/AlexKomzzz/collectivity-tlg-bot/pkg/server"
+	"github.com/AlexKomzzz/collectivity-tlg-bot/pkg/storage"
+	"github.com/AlexKomzzz/collectivity-tlg-bot/pkg/storage/boltdb"
+	"github.com/AlexKomzzz/collectivity-tlg-bot/pkg/telegram"
 	"github.com/boltdb/bolt"
 	tgbotapi "github.com/go-telegram-bot-api/telegram-bot-api"
 	"github.com/zhashkevych/go-pocket-sdk"
-	"github.com/zhashkevych/telegram-pocket-bot/pkg/config"
-	"github.com/zhashkevych/telegram-pocket-bot/pkg/server"
-	"github.com/zhashkevych/telegram-pocket-bot/pkg/storage"
-	"github.com/zhashkevych/telegram-pocket-bot/pkg/storage/boltdb"
-	"github.com/zhashkevych/telegram-pocket-bot/pkg/telegram"
-	"log"
 )
 
 func main() {

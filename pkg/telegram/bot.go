@@ -1,10 +1,10 @@
 package telegram
 
 import (
+	"github.com/AlexKomzzz/collectivity-tlg-bot/pkg/config"
+	"github.com/AlexKomzzz/collectivity-tlg-bot/pkg/storage"
 	tgbotapi "github.com/go-telegram-bot-api/telegram-bot-api"
 	"github.com/zhashkevych/go-pocket-sdk"
-	"github.com/zhashkevych/telegram-pocket-bot/pkg/config"
-	"github.com/zhashkevych/telegram-pocket-bot/pkg/storage"
 )
 
 type Bot struct {

@@ -2,13 +2,14 @@ package boltdb
 
 import (
 	"errors"
-	"github.com/boltdb/bolt"
-	"github.com/zhashkevych/telegram-pocket-bot/pkg/storage"
 	"strconv"
+
+	"github.com/AlexKomzzz/collectivity-tlg-bot/pkg/storage"
+	"github.com/boltdb/bolt"
 )
 
 type TokenStorage struct {
-	db     *bolt.DB
+	db *bolt.DB
 }
 
 func NewTokenStorage(db *bolt.DB) *TokenStorage {
