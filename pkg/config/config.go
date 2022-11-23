@@ -9,9 +9,12 @@ type Messages struct {
 
 type Responses struct {
 	Start             string `mapstructure:"start"`
+	RedirectURL       string `mapstructure:"redirect_url"`
+	RegisterURL       string `mapstructure:"register_url"`
+	AuthLink          string `mapstructure:"auth_link"`
 	AlreadyAuthorized string `mapstructure:"already_authorized"`
 	UnknownCommand    string `mapstructure:"unknown_command"`
-	LinkSaved         string `mapstructure:"link_saved"`
+	ResultDebt        string `mapstructure:"result_debt"`
 }
 
 type Errors struct {
@@ -21,12 +24,11 @@ type Errors struct {
 }
 
 type Config struct {
-	TelegramToken     string
-	PocketConsumerKey string
-	AuthServerURL     string
+	TelegramToken string
 
 	BotURL     string `mapstructure:"bot_url"`
 	BoltDBFile string `mapstructure:"db_file"`
+	ServPort   string `mapstructure:"serv_port"`
 
 	Messages Messages
 }
@@ -69,16 +71,6 @@ func fromEnv(cfg *Config) error {
 		return err
 	}
 	cfg.TelegramToken = viper.GetString("token")
-
-	if err := viper.BindEnv("consumer_key"); err != nil {
-		return err
-	}
-	cfg.PocketConsumerKey = viper.GetString("consumer_key")
-
-	if err := viper.BindEnv("auth_server_url"); err != nil {
-		return err
-	}
-	cfg.AuthServerURL = viper.GetString("auth_server_url")
 
 	return nil
 }

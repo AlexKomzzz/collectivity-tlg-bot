@@ -23,6 +23,7 @@ func (s *TokenStorage) Save(chatID int64, token string, bucket storage.Bucket) e
 	})
 }
 
+// определение JWT из БД по chatID
 func (s *TokenStorage) Get(chatID int64, bucket storage.Bucket) (string, error) {
 	var token string
 

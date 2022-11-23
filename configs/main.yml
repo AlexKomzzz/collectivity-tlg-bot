@@ -1,13 +1,17 @@
+bot_url: "https://t.me/Collectivity_Bot"
 db_file: "bot.db"
+serv_port: ":8090"
 
-bot_url: "https://t.me/getpocket_client_bot"
 
 messages:
   response:
-    start: "Привет! Чтобы сохранять ссылки в своем Pocket аккаунте, для начала тебе необходимо дать мне на это доступ. Для этого переходи по ссылке:\n%s"
-    already_authorized: "Ты уже авторизовался с помощью своего Pocket аккаунта. Присылай ссылку чтобы сохранить."
+    start: "Привет! Чтобы пользоваться данным ботом, для начала Вам необходимо пройти авторизацю по ссылке: %s.\n Если учетной записи еще нет, то сначала зарегистрируйтесь по ссылке:\n%s"
+    redirect_url: "http://localhost:8090"
+    register_url: "http://localhost:8080/auth/sign-form"
+    auth_link: "http://localhost:8080/auth/tlg/login"
+    already_authorized: "Вы уже авторизированы. Для получения необходимой информации отправьте соответствующую команду."
     unknown_command: "Я не знаю такой команды :("
-    link_saved: "Ссылка успешно сохранена!"
+    result_debt: "Ваша задолженность: %v"
   error:
     default: "Произошла неизвестная ошибка."
     invalid_url:  "Это невалидная ссылка."

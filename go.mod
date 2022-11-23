@@ -7,7 +7,6 @@ require (
 	github.com/go-telegram-bot-api/telegram-bot-api v4.6.4+incompatible
 	github.com/pkg/errors v0.9.1
 	github.com/spf13/viper v1.14.0
-	github.com/zhashkevych/go-pocket-sdk v0.0.0-20201222091903-35b3b269a1e8
 	go.uber.org/zap v1.23.0
 )
 

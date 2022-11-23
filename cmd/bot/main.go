@@ -10,7 +10,6 @@ import (
 	"github.com/AlexKomzzz/collectivity-tlg-bot/pkg/telegram"
 	"github.com/boltdb/bolt"
 	tgbotapi "github.com/go-telegram-bot-api/telegram-bot-api"
-	"github.com/zhashkevych/go-pocket-sdk"
 )
 
 func main() {
@@ -25,20 +24,15 @@ func main() {
 	}
 	botApi.Debug = true
 
-	pocketClient, err := pocket.NewClient(cfg.PocketConsumerKey)
-	if err != nil {
-		log.Fatal(err)
-	}
-
 	db, err := initBolt()
 	if err != nil {
 		log.Fatal(err)
 	}
 	storage := boltdb.NewTokenStorage(db)
 
-	bot := telegram.NewBot(botApi, pocketClient, cfg.AuthServerURL, storage, cfg.Messages)
+	bot := telegram.NewBot(botApi, storage, cfg.Messages)
 
-	redirectServer := server.NewAuthServer(cfg.BotURL, storage, pocketClient)
+	redirectServer := server.NewAuthServer(storage, cfg)
 
 	go func() {
 		if err := redirectServer.Start(); err != nil {

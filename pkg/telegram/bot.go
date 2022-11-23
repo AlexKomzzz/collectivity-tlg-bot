@@ -4,26 +4,21 @@ import (
 	"github.com/AlexKomzzz/collectivity-tlg-bot/pkg/config"
 	"github.com/AlexKomzzz/collectivity-tlg-bot/pkg/storage"
 	tgbotapi "github.com/go-telegram-bot-api/telegram-bot-api"
-	"github.com/zhashkevych/go-pocket-sdk"
 )
 
 type Bot struct {
-	bot         *tgbotapi.BotAPI
-	client      *pocket.Client
-	redirectURL string
+	bot *tgbotapi.BotAPI
 
 	storage storage.TokenStorage
 
 	messages config.Messages
 }
 
-func NewBot(bot *tgbotapi.BotAPI, client *pocket.Client, redirectURL string, storage storage.TokenStorage, messages config.Messages) *Bot {
+func NewBot(bot *tgbotapi.BotAPI, storage storage.TokenStorage, messages config.Messages) *Bot {
 	return &Bot{
-		bot:         bot,
-		client:      client,
-		redirectURL: redirectURL,
-		storage:     storage,
-		messages:    messages,
+		bot:      bot,
+		storage:  storage,
+		messages: messages,
 	}
 }
 
@@ -41,18 +36,15 @@ func (b *Bot) Start() error {
 			continue
 		}
 
-		// Handle commands
+		// если пришла команда
 		if update.Message.IsCommand() {
 			if err := b.handleCommand(update.Message); err != nil {
 				b.handleError(update.Message.Chat.ID, err)
 			}
 
 			continue
-		}
-
-		// Handle regular messages
-		if err := b.handleMessage(update.Message); err != nil {
-			b.handleError(update.Message.Chat.ID, err)
+		} else {
+			b.handleUnknownCommand(update.Message)
 		}
 	}
 

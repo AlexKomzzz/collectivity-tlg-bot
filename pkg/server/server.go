@@ -5,9 +5,9 @@ import (
 	"net/http"
 	"strconv"
 
+	"github.com/AlexKomzzz/collectivity-tlg-bot/pkg/config"
 	"github.com/AlexKomzzz/collectivity-tlg-bot/pkg/storage"
 	"github.com/pkg/errors"
-	"github.com/zhashkevych/go-pocket-sdk"
 	"go.uber.org/zap"
 )
 
@@ -16,23 +16,21 @@ type AuthServer struct {
 	logger *zap.Logger
 
 	storage storage.TokenStorage
-	client  *pocket.Client
 
-	redirectUrl string
+	config *config.Config
 }
 
-func NewAuthServer(redirectUrl string, storage storage.TokenStorage, client *pocket.Client) *AuthServer {
+func NewAuthServer(storage storage.TokenStorage, config *config.Config) *AuthServer {
 	return &AuthServer{
-		redirectUrl: redirectUrl,
-		storage:     storage,
-		client:      client,
+		storage: storage,
+		config:  config,
 	}
 }
 
 func (s *AuthServer) Start() error {
 	s.server = &http.Server{
 		Handler: s,
-		Addr:    ":80",
+		Addr:    s.config.ServPort,
 	}
 
 	logger, _ := zap.NewDevelopment(zap.Fields(
@@ -74,7 +72,7 @@ func (s *AuthServer) ServeHTTP(w http.ResponseWriter, r *http.Request) {
 		return
 	}
 
-	w.Header().Set("Location", s.redirectUrl)
+	w.Header().Set("Location", s.config.BotURL)
 	w.WriteHeader(http.StatusMovedPermanently)
 }
 
