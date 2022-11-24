@@ -1,7 +1,7 @@
 package telegram
 
 import (
-	"net/url"
+	"fmt"
 
 	tgbotapi "github.com/go-telegram-bot-api/telegram-bot-api"
 )
@@ -49,22 +49,14 @@ func (b *Bot) handleUnknownCommand(message *tgbotapi.Message) error {
 // получение debt
 func (b *Bot) handleGetDebt(message *tgbotapi.Message) error {
 
-	// получение токена из БД
-	accessToken, err := b.getAccessToken(message.Chat.ID)
+	// получение debt из БД
+	debtUser, err := b.getDebtUser(message.Chat.ID)
 	if err != nil {
 		return b.initAuthorizationProcess(message)
 	}
 
-	// отправка запроса в АПИ с токеном в URL, получение данных
-	//
-
-	// отправка полученныъ данных по debt клиенту в тлг
-	msg := tgbotapi.NewMessage(message.Chat.ID, b.messages.Responses.ResultDebt)
+	// отправка полученных данных debt клиенту в тлг
+	msg := tgbotapi.NewMessage(message.Chat.ID, fmt.Sprintf(b.messages.Responses.ResultDebt, debtUser))
 	_, err = b.bot.Send(msg)
-	return err
-}
-
-func (b *Bot) validateURL(text string) error {
-	_, err := url.ParseRequestURI(text)
 	return err
 }

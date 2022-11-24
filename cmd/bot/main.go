@@ -57,7 +57,7 @@ func initBolt() (*bolt.DB, error) {
 			return err
 		}
 
-		_, err = tx.CreateBucketIfNotExists([]byte(storage.RequestTokens))
+		_, err = tx.CreateBucketIfNotExists([]byte(storage.Debt))
 		return err
 	}); err != nil {
 		return nil, err

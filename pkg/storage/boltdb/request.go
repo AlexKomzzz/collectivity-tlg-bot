@@ -16,10 +16,10 @@ func NewTokenStorage(db *bolt.DB) *TokenStorage {
 	return &TokenStorage{db: db}
 }
 
-func (s *TokenStorage) Save(chatID int64, token string, bucket storage.Bucket) error {
+func (s *TokenStorage) Save(chatID int64, debt string, bucket storage.Bucket) error {
 	return s.db.Update(func(tx *bolt.Tx) error {
 		b := tx.Bucket([]byte(bucket))
-		return b.Put(intToBytes(chatID), []byte(token))
+		return b.Put(intToBytes(chatID), []byte(debt))
 	})
 }
 

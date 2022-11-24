@@ -15,6 +15,7 @@ type Responses struct {
 	AlreadyAuthorized string `mapstructure:"already_authorized"`
 	UnknownCommand    string `mapstructure:"unknown_command"`
 	ResultDebt        string `mapstructure:"result_debt"`
+	GetDebtLink       string `mapstructure:"get_debt_link"`
 }
 
 type Errors struct {
