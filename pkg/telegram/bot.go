@@ -1,6 +1,8 @@
 package telegram
 
 import (
+	"log"
+
 	"github.com/AlexKomzzz/collectivity-tlg-bot/pkg/config"
 	"github.com/AlexKomzzz/collectivity-tlg-bot/pkg/storage"
 	tgbotapi "github.com/go-telegram-bot-api/telegram-bot-api"
@@ -31,8 +33,11 @@ func (b *Bot) Start() error {
 		return err
 	}
 
+	log.Println("Bot START!")
+
 	for update := range updates {
 		if update.Message == nil { // ignore any non-Message Updates
+			log.Println("60 sec")
 			continue
 		}
 

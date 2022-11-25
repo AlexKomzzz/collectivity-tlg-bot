@@ -2,6 +2,7 @@ package telegram
 
 import (
 	"errors"
+	"log"
 
 	tgbotapi "github.com/go-telegram-bot-api/telegram-bot-api"
 )
@@ -12,6 +13,7 @@ var (
 )
 
 func (b *Bot) handleError(chatID int64, err error) {
+	log.Println("Ошибка!")
 	var messageText string
 
 	switch err {

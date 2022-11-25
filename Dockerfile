@@ -1,20 +1,24 @@
-FROM golang:1.15-alpine3.12 AS builder
+FROM golang:latest AS build
 
-RUN go version
+# RUN go version
+WORKDIR /github.com/AlexKomzzz/collectivity-tlg-bot/
 
-COPY . /github.com/zhashkevych/telegram-pocket-bot/
-WORKDIR /github.com/zhashkevych/telegram-pocket-bot/
+COPY go.* ./
 
 RUN go mod download
-RUN GOOS=linux go build -o ./.bin/bot ./cmd/bot/main.go
 
-FROM alpine:latest
+COPY . /github.com/AlexKomzzz/collectivity-tlg-bot/
 
-WORKDIR /root/
+RUN CGO_ENABLED=0 go build -o ./.bin/bot ./cmd/bot/main.go
 
-COPY --from=0 /github.com/zhashkevych/telegram-pocket-bot/.bin/bot .
-COPY --from=0 /github.com/zhashkevych/telegram-pocket-bot/configs configs/
+FROM scratch
 
-EXPOSE 80
+WORKDIR /
+
+COPY --from=build /github.com/AlexKomzzz/collectivity-tlg-bot/.bin/bot .
+COPY --from=build /github.com/AlexKomzzz/collectivity-tlg-bot/configs configs/
+COPY --from=build /etc/ssl/certs/ca-certificates.crt /etc/ssl/certs/  
+
+EXPOSE 9090
 
 CMD ["./bot"]

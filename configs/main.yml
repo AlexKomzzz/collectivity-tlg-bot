@@ -6,9 +6,9 @@ serv_port: ":9090"
 messages:
   response:
     start: "Привет! Чтобы пользоваться данным ботом, для начала Вам необходимо пройти авторизацю по ссылке: %s.\n Если учетной записи еще нет, то сначала зарегистрируйтесь по ссылке:\n%s"
-    redirect_url: "http://localhost:9090"
+    redirect_url: "http://tlg-bot:9090"
     register_url: "http://localhost:8080/auth/sign-form"
-    auth_link: "http://localhost:8080/auth/tlg/login"
+    auth_link: "http://localhost:8080/auth/tlg/login?redirect_url=http://tlg-bot:9090/?chat_id="
     get_debt_link: "http://localhost:8080/auth/tlg/debt"
     already_authorized: "Вы уже авторизированы. Для получения необходимой информации отправьте соответствующую команду."
     unknown_command: "Я не знаю такой команды :("

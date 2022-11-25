@@ -7,7 +7,7 @@ run: build
 	./.bin/bot
 
 build-image:
-	docker build -t zhashkevych/pocketer:0.1 .
+	docker build -t telegram-bot/collect .
 
 start-container:
 	docker run --env-file .env -p 80:80 zhashkevych/pocketer:0.1

@@ -11,7 +11,7 @@ import (
 func (b *Bot) initAuthorizationProcess(message *tgbotapi.Message) error {
 
 	// формирование url для регистрации с данными о ссылке редиректа
-	authLink := fmt.Sprintf("%s?redirest_url=%s/?chat_id=%d", b.messages.Responses.AuthLink, b.messages.Responses.RedirectURL, message.Chat.ID)
+	authLink := fmt.Sprintf("%s%d", b.messages.Responses.AuthLink, message.Chat.ID)
 
 	msgText := fmt.Sprintf(b.messages.Responses.Start, authLink, b.messages.Responses.RegisterURL)
 	msg := tgbotapi.NewMessage(message.Chat.ID, msgText)

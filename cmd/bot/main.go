@@ -13,20 +13,21 @@ import (
 )
 
 func main() {
+	// инициализация конфиг и env
 	cfg, err := config.Init()
 	if err != nil {
-		log.Fatal(err)
+		log.Println("ошибка при инициализации файлов config и env: ", err)
 	}
 
 	botApi, err := tgbotapi.NewBotAPI(cfg.TelegramToken)
 	if err != nil {
-		log.Fatal(err)
+		log.Println("ошибка при создании бота: ", err)
 	}
 	botApi.Debug = true
 
 	db, err := initBolt()
 	if err != nil {
-		log.Fatal(err)
+		log.Println("Ошибка при создании БД: ", err)
 	}
 	storage := boltdb.NewTokenStorage(db)
 
@@ -36,12 +37,13 @@ func main() {
 
 	go func() {
 		if err := redirectServer.Start(); err != nil {
-			log.Fatal(err)
+			log.Println("Ошибка при запуске сервера: ", err)
 		}
-	}()
+		log.Println("ServBot START!")
 
+	}()
 	if err := bot.Start(); err != nil {
-		log.Fatal(err)
+		log.Println("Ошибка при запуске бота: ", err)
 	}
 }
 

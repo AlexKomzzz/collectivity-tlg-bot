@@ -1,6 +1,10 @@
 package config
 
-import "github.com/spf13/viper"
+import (
+	"log"
+
+	"github.com/spf13/viper"
+)
 
 type Messages struct {
 	Responses
@@ -36,15 +40,18 @@ type Config struct {
 
 func Init() (*Config, error) {
 	if err := setUpViper(); err != nil {
+		log.Println("Ошибка при инициализации файла конфиг")
 		return nil, err
 	}
 
 	var cfg Config
 	if err := unmarshal(&cfg); err != nil {
+		log.Println("Ошибка при парсинге даных из конфига в структуру")
 		return nil, err
 	}
 
 	if err := fromEnv(&cfg); err != nil {
+		log.Println("Ошибка при загрузке .env файла")
 		return nil, err
 	}
 
@@ -68,10 +75,11 @@ func unmarshal(cfg *Config) error {
 }
 
 func fromEnv(cfg *Config) error {
-	if err := viper.BindEnv("token"); err != nil {
+	if err := viper.BindEnv("token_bot"); err != nil {
+		log.Println("Ошибка при загрузке .env файла")
 		return err
 	}
-	cfg.TelegramToken = viper.GetString("token")
+	cfg.TelegramToken = viper.GetString("token_bot")
 
 	return nil
 }

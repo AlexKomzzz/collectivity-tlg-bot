@@ -2,6 +2,7 @@ package telegram
 
 import (
 	"fmt"
+	"log"
 
 	tgbotapi "github.com/go-telegram-bot-api/telegram-bot-api"
 )
@@ -24,7 +25,7 @@ func (b *Bot) handleCommand(message *tgbotapi.Message) error {
 
 // функция при получении команды /start
 func (b *Bot) handleStartCommand(message *tgbotapi.Message) error {
-
+	log.Println("Получена команда /start")
 	// получение JWT из БД по chatID
 	_, err := b.getAccessToken(message.Chat.ID)
 
@@ -41,6 +42,8 @@ func (b *Bot) handleStartCommand(message *tgbotapi.Message) error {
 
 // ответ на незнакомую команду
 func (b *Bot) handleUnknownCommand(message *tgbotapi.Message) error {
+	log.Println("Получена неизвестная команда")
+
 	msg := tgbotapi.NewMessage(message.Chat.ID, b.messages.Responses.UnknownCommand)
 	_, err := b.bot.Send(msg)
 	return err
@@ -48,6 +51,8 @@ func (b *Bot) handleUnknownCommand(message *tgbotapi.Message) error {
 
 // получение debt
 func (b *Bot) handleGetDebt(message *tgbotapi.Message) error {
+
+	log.Println("Получена команда /debt")
 
 	// получение debt из БД
 	debtUser, err := b.getDebtUser(message.Chat.ID)

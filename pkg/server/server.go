@@ -2,6 +2,8 @@ package server
 
 import (
 	"encoding/json"
+	"io/ioutil"
+	"log"
 	"net/http"
 	"strconv"
 
@@ -33,6 +35,7 @@ func NewAuthServer(storage storage.TokenStorage, config *config.Config) *AuthSer
 }
 
 func (s *AuthServer) Start() error {
+
 	s.server = &http.Server{
 		Handler: s,
 		Addr:    s.config.ServPort,
@@ -72,21 +75,28 @@ func (s *AuthServer) ServeHTTP(w http.ResponseWriter, r *http.Request) {
 		return
 	}
 
-	var dataBodyReq []byte
+	// var dataBodyReq []byte
 	dataClient := &dataClient{}
-	_, err = r.Body.Read(dataBodyReq)
+	bodyBytes, err := ioutil.ReadAll(r.Body)
 	if err != nil {
-		s.logger.Debug("received invalid chat_id query param",
-			zap.String("chat_id", chatIDQuery))
+		s.logger.Debug("invalid body req",
+			zap.String("err", err.Error()))
 		w.WriteHeader(http.StatusBadRequest)
 		return
 	}
+	defer r.Body.Close()
 
-	json.Unmarshal(dataBodyReq, dataClient)
-
+	err = json.Unmarshal(bodyBytes, dataClient)
+	if err != nil {
+		s.logger.Debug("error Unmarshal body request",
+			zap.String("err", err.Error()))
+		w.WriteHeader(http.StatusInternalServerError)
+		return
+	}
+	log.Println("data client: ", dataClient)
 	// сохранение token в БД по chatID
 	if err := s.saveTokenInDB(dataClient.AccessToken, chatID); err != nil {
-		s.logger.Debug("failed to create access token",
+		s.logger.Debug("failed to save access token",
 			zap.String("err", err.Error()))
 		w.WriteHeader(http.StatusInternalServerError)
 		return
@@ -94,14 +104,17 @@ func (s *AuthServer) ServeHTTP(w http.ResponseWriter, r *http.Request) {
 
 	// сохранение debt в БД по chatID
 	if err := s.saveDebtInDB(dataClient.Debt, chatID); err != nil {
-		s.logger.Debug("failed to create access token",
+		s.logger.Debug("failed to save debt",
 			zap.String("err", err.Error()))
 		w.WriteHeader(http.StatusInternalServerError)
 		return
 	}
 
-	w.Header().Set("Location", s.config.BotURL)
-	w.WriteHeader(http.StatusMovedPermanently)
+	// w.Header().Set("Location", s.config.BotURL)
+	// w.WriteHeader(http.StatusBadRequest)
+	// log.Println("ссылка на бота отправлена: ", s.config.BotURL)
+	w.WriteHeader(http.StatusOK)
+
 }
 
 // сохранение debt в БД по chatID
