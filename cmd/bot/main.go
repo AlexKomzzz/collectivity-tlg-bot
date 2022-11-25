@@ -16,18 +16,18 @@ func main() {
 	// инициализация конфиг и env
 	cfg, err := config.Init()
 	if err != nil {
-		log.Println("ошибка при инициализации файлов config и env: ", err)
+		log.Fatalln("ошибка при инициализации файлов config и env: ", err)
 	}
 
 	botApi, err := tgbotapi.NewBotAPI(cfg.TelegramToken)
 	if err != nil {
-		log.Println("ошибка при создании бота: ", err)
+		log.Fatalln("ошибка при создании бота: ", err)
 	}
 	botApi.Debug = true
 
 	db, err := initBolt()
 	if err != nil {
-		log.Println("Ошибка при создании БД: ", err)
+		log.Fatalln("Ошибка при создании БД: ", err)
 	}
 	storage := boltdb.NewTokenStorage(db)
 
@@ -37,18 +37,18 @@ func main() {
 
 	go func() {
 		if err := redirectServer.Start(); err != nil {
-			log.Println("Ошибка при запуске сервера: ", err)
+			log.Fatalln("Ошибка при запуске сервера: ", err)
 		}
 		log.Println("ServBot START!")
 
 	}()
 	if err := bot.Start(); err != nil {
-		log.Println("Ошибка при запуске бота: ", err)
+		log.Fatalln("Ошибка при запуске бота: ", err)
 	}
 }
 
 func initBolt() (*bolt.DB, error) {
-	db, err := bolt.Open("bot.db", 0600, nil)
+	db, err := bolt.Open("/bolt_db/bot.db", 0600, nil)
 	if err != nil {
 		return nil, err
 	}
