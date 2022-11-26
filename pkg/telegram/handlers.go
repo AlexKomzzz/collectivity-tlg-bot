@@ -10,6 +10,7 @@ import (
 const (
 	commandStart = "start"
 	commandDebt  = "debt"
+	commandHelp  = "help"
 )
 
 func (b *Bot) handleCommand(message *tgbotapi.Message) error {
@@ -18,6 +19,8 @@ func (b *Bot) handleCommand(message *tgbotapi.Message) error {
 		return b.handleStartCommand(message)
 	case commandDebt:
 		return b.handleGetDebt(message)
+	case commandHelp:
+		return b.handleHelp(message)
 	default:
 		return b.handleUnknownCommand(message)
 	}
@@ -40,11 +43,11 @@ func (b *Bot) handleStartCommand(message *tgbotapi.Message) error {
 	return err
 }
 
-// ответ на незнакомую команду
-func (b *Bot) handleUnknownCommand(message *tgbotapi.Message) error {
-	log.Println("Получена неизвестная команда")
+// ответ на запрос справки /help
+func (b *Bot) handleHelp(message *tgbotapi.Message) error {
+	log.Println("Получена команда /help")
 
-	msg := tgbotapi.NewMessage(message.Chat.ID, b.messages.Responses.UnknownCommand)
+	msg := tgbotapi.NewMessage(message.Chat.ID, b.messages.Responses.Help)
 	_, err := b.bot.Send(msg)
 	return err
 }
@@ -63,5 +66,14 @@ func (b *Bot) handleGetDebt(message *tgbotapi.Message) error {
 	// отправка полученных данных debt клиенту в тлг
 	msg := tgbotapi.NewMessage(message.Chat.ID, fmt.Sprintf(b.messages.Responses.ResultDebt, debtUser))
 	_, err = b.bot.Send(msg)
+	return err
+}
+
+// ответ на незнакомую команду
+func (b *Bot) handleUnknownCommand(message *tgbotapi.Message) error {
+	log.Println("Получена неизвестная команда")
+
+	msg := tgbotapi.NewMessage(message.Chat.ID, b.messages.Responses.UnknownCommand)
+	_, err := b.bot.Send(msg)
 	return err
 }
