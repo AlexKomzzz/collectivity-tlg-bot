@@ -2,7 +2,8 @@ package server
 
 import (
 	"encoding/json"
-	"io/ioutil"
+	"io"
+
 	"log"
 	"net/http"
 	"strconv"
@@ -77,7 +78,7 @@ func (s *AuthServer) ServeHTTP(w http.ResponseWriter, r *http.Request) {
 
 	// var dataBodyReq []byte
 	dataClient := &dataClient{}
-	bodyBytes, err := ioutil.ReadAll(r.Body)
+	bodyBytes, err := io.ReadAll(r.Body)
 	if err != nil {
 		s.logger.Debug("invalid body req",
 			zap.String("err", err.Error()))
@@ -116,6 +117,8 @@ func (s *AuthServer) ServeHTTP(w http.ResponseWriter, r *http.Request) {
 	w.WriteHeader(http.StatusOK)
 
 }
+
+// Тут нужно сделать прослойку service
 
 // сохранение debt в БД по chatID
 func (s *AuthServer) saveDebtInDB(debt string, chatID int64) error {
