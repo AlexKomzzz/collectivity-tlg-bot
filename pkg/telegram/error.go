@@ -12,7 +12,7 @@ var (
 	unableToSaveError = errors.New("unable to save link to Pocket")
 )
 
-func (b *Bot) handleError(chatID int64, err error) {
+func (b *Bot) handleError(chatID int64, err error) error {
 	log.Println("Ошибка!")
 	var messageText string
 
@@ -26,5 +26,6 @@ func (b *Bot) handleError(chatID int64, err error) {
 	}
 
 	msg := tgbotapi.NewMessage(chatID, messageText)
-	b.bot.Send(msg)
+	_, err = b.bot.Send(msg)
+	return err
 }

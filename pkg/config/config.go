@@ -19,6 +19,7 @@ type Responses struct {
 	AlreadyAuthorized string `mapstructure:"already_authorized"`
 	UnknownCommand    string `mapstructure:"unknown_command"`
 	ResultDebt        string `mapstructure:"result_debt"`
+	ResultDel         string `mapstructure:"result_del"`
 	GetDebtLink       string `mapstructure:"get_debt_link"`
 	Help              string `mapstructure:"help"`
 }

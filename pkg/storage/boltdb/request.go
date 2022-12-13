@@ -40,6 +40,23 @@ func (s *TokenStorage) Get(chatID int64, bucket storage.Bucket) (string, error) 
 	return token, err
 }
 
+// удаление токена из БД
+func (s *TokenStorage) Delete(chatID int64, bucket storage.Bucket) error {
+	return s.db.Update(func(tx *bolt.Tx) error {
+
+		// удаление данных о задожденности из ведра Debt
+		b := tx.Bucket([]byte(storage.Debt))
+		err := b.Delete(intToBytes(chatID))
+		if err != nil {
+			return err
+		}
+
+		// удаление токена из ведра AccessTokens
+		bTwo := tx.Bucket([]byte(storage.AccessTokens))
+		return bTwo.Delete(intToBytes(chatID))
+	})
+}
+
 func intToBytes(v int64) []byte {
 	return []byte(strconv.FormatInt(v, 10))
 }

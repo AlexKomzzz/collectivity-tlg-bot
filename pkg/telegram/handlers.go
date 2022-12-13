@@ -10,6 +10,7 @@ import (
 const (
 	commandStart = "start"
 	commandDebt  = "debt"
+	commandDel   = "logout"
 	commandHelp  = "help"
 )
 
@@ -19,6 +20,8 @@ func (b *Bot) handleCommand(message *tgbotapi.Message) error {
 		return b.handleStartCommand(message)
 	case commandDebt:
 		return b.handleGetDebt(message)
+	case commandDel:
+		return b.handleDelTokenDB(message)
 	case commandHelp:
 		return b.handleHelp(message)
 	default:
@@ -65,6 +68,22 @@ func (b *Bot) handleGetDebt(message *tgbotapi.Message) error {
 
 	// отправка полученных данных debt клиенту в тлг
 	msg := tgbotapi.NewMessage(message.Chat.ID, fmt.Sprintf(b.messages.Responses.ResultDebt, debtUser))
+	_, err = b.bot.Send(msg)
+	return err
+}
+
+// удаление токена из БД
+func (b *Bot) handleDelTokenDB(message *tgbotapi.Message) error {
+
+	log.Println("Получена команда /logout")
+
+	err := b.delTokentUser(message.Chat.ID)
+	if err != nil {
+		return b.handleError(message.Chat.ID, err)
+	}
+
+	// отправка ответа об успешном удалении
+	msg := tgbotapi.NewMessage(message.Chat.ID, b.messages.Responses.ResultDel)
 	_, err = b.bot.Send(msg)
 	return err
 }
