@@ -48,7 +48,7 @@ func main() {
 }
 
 func initBolt() (*bolt.DB, error) {
-	db, err := bolt.Open("/bot.db", 0600, nil)
+	db, err := bolt.Open("/bltdb/bot.db", 0600, nil)
 	if err != nil {
 		return nil, err
 	}
